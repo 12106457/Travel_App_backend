@@ -12,4 +12,6 @@ router.post("/otp", userController.validateOTP);
 
 router.get("/user", userController.getUserProfile);
 
+router.put("/updateprofile", userController.updateProfile);
+
 module.exports = router;

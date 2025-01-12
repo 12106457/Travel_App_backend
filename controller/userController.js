@@ -295,3 +295,42 @@ exports.getUserProfile = async (req, res) => {
       });
     });
 };
+
+exports.updateProfile = (req, res) => {
+  const { email, updateData } = req.body;
+
+  // Ensure email is provided
+  if (!email || !updateData) {
+    return res.status(400).send({
+      status: false,
+      message: "Email and update data are required.",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { email: email.toLowerCase() },
+    { $set: updateData },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        return res.status(404).send({
+          status: false,
+          message: "User doesn't exist.",
+        });
+      }
+
+      res.status(200).send({
+        status: true,
+        message: "User profile updated successfully.",
+        data: updatedUser,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        status: false,
+        message: "Something went wrong.",
+        error: err.message,
+      });
+    });
+};
