@@ -2,7 +2,8 @@ const User = require("../model/userModel");
 const bcryptjs = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const otpModel = require("../model/otpModel");
-
+const couponModel = require("../model/couponModel");
+const userCoupon = require("../model/userCouponModel");
 // Step 1: Create a transporter
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -11,9 +12,6 @@ const transporter = nodemailer.createTransport({
     pass: "raum qnxh dxhd gcyo",
   },
 });
-
-const recipientEmail = "kedarisettysai440@gmail.com";
-const otp = Math.floor(100000 + Math.random() * 900000);
 
 const sendOtpEmail = async (toEmail, otp) => {
   const mailOptions = {
@@ -29,7 +27,6 @@ const sendOtpEmail = async (toEmail, otp) => {
   try {
     // Step 3: Send the email
     const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent: %s", info.response);
     return {
       status: true,
       OTP: otp,
@@ -42,62 +39,66 @@ const sendOtpEmail = async (toEmail, otp) => {
   }
 };
 
-exports.createUser = (req, res) => {
-  const { email } = req.body;
-  // console.log(req.body);
+exports.createUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  User.findOne({ email: email.toLowerCase() })
-    .then((existingUser) => {
-      if (existingUser) {
-        return res.status(400).send({
-          status: false,
-          message: "User already exists with this email",
-        });
-      }
-
-      const data = req.body;
-      bcryptjs.genSalt(10, (err, salt) => {
-        if (!err) {
-          bcryptjs
-            .hash(data.password, salt, (err, hpassword) => {
-              const newUser = new User({
-                ...req.body,
-                password: hpassword,
-                email: req.body.email.toLowerCase(),
-              });
-              newUser
-                .save()
-                .then((response) => {
-                  res.status(201).send({
-                    status: true,
-                    message: "User register successfully",
-                    data: response,
-                  });
-                })
-                .catch((err) => {
-                  res.status(500).send({
-                    status: false,
-                    message: "Error creating user",
-                    error: err.message,
-                  });
-                });
-            })
-            .catch((err) => {
-              res.status(500).send({
-                status: false,
-                message: "error occur while doing hashing...",
-              });
-            });
-        }
-      });
-    })
-    .catch((err) => {
-      res.status(500).send({
+    // Check if user already exists
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser) {
+      return res.status(400).send({
         status: false,
-        message: "Server error",
-        error: err.message,
+        message: "User already exists with this email",
       });
+    }
+
+    // Fetch coupons data
+    const couponsData = await couponModel.findOne({ code: "NEWUSER" });
+    if (!couponsData) {
+      return res.status(404).send({
+        status: false,
+        message: "No coupon found for NEWUSER.",
+      });
+    }
+
+    // Hash password
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(password, salt);
+
+    // Create and save the new user
+    const newUser = new User({
+      ...req.body,
+      password: hashedPassword,
+      email: email.toLowerCase(),
     });
+
+    const savedUser = await newUser.save();
+
+    //adding coupon in db
+
+    const newCouponData = new userCoupon({
+      userId: savedUser._id,
+      couponId: couponsData._id,
+      minOrderValue: 2500,
+      maxDiscount: 1000,
+    });
+    const usercouponresponse = await newCouponData.save();
+
+    // Respond with success
+    return res.status(201).send({
+      status: true,
+      message: "User registered successfully",
+      data: savedUser,
+      voucher: couponsData.image,
+    });
+  } catch (err) {
+    // Global error handler
+    return res.status(500).send({
+      status: false,
+      message: "Server error",
+      error: err.message,
+    });
+  }
 };
 
 exports.getUser = (req, res) => {

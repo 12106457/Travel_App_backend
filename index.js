@@ -1,39 +1,43 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
-const cors=require("cors")
+const cors = require("cors");
 const app = express();
 dotenv.config();
-const userRoute=require("./route/route")
+const userRoute = require("./route/authRoute");
+const couponRoute = require("./route/couponRoute");
 // Middleware (optional)
 app.use(express.json());
 app.use(
-    cors({
-      origin: true,
-      methods: ["POST", "GET", "PUT", "DELETE"],
-      credentials: true,
-    })
-  );
+  cors({
+    origin: true,
+    methods: ["POST", "GET", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
-mongoose.connect(process.env.MONGO_URI)
-.then(()=>{
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
     console.log("mongodb connect successfully...");
-}).catch((err)=>{
-    console.log("some thing went wrong:",err);
-})
+  })
+  .catch((err) => {
+    console.log("some thing went wrong:", err);
+  });
 
-app.use('/auth',userRoute)
+app.use("/auth", userRoute);
+app.use("/coupon", couponRoute);
 
 app.get("/", (req, res) => {
-    res.send("Welcome to the Travelling App Backend Server...");
+  res.send("Welcome to the Travelling App Backend Server...");
 });
 
 // Start server
 const PORT = 3001;
 app.listen(PORT, (err) => {
-    if (err) {
-        console.log("Something went wrong while starting the server...");
-    } else {
-        console.log(`Server is started at port ${PORT}`);
-    }
+  if (err) {
+    console.log("Something went wrong while starting the server...");
+  } else {
+    console.log(`Server is started at port ${PORT}`);
+  }
 });
