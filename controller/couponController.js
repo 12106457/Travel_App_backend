@@ -33,7 +33,9 @@ exports.updateCouponDetails = async (req, res) => {
     const updateData = req.body;
 
     if (!id) {
-      return res.status(400).json({ message: "Coupon ID is required" });
+      return res
+        .status(400)
+        .json({ status: false, message: "Coupon ID is required" });
     }
 
     const updatedCoupon = await couponModel.findByIdAndUpdate(
@@ -61,6 +63,38 @@ exports.updateCouponDetails = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+exports.deleteCoupon = (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res
+      .status(400)
+      .json({ status: false, message: "Coupon ID is required" });
+  }
+  couponModel
+    .findByIdAndDelete({ _id: id })
+    .then((response) => {
+      if (!response) {
+        res.status(404).send({
+          status: false,
+          message: "No Coupon is exist with given Id",
+        });
+      } else {
+        res.status(200).send({
+          status: true,
+          message: "Deleted successfully",
+          data: response,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        status: false,
+        message: "Something went wrong",
+        error: err.message,
+      });
+    });
 };
 
 exports.addUserCoupon = (req, res) => {

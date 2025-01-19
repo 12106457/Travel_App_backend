@@ -10,6 +10,8 @@ router.get("/getAllCoupons", couponController.getAllCoupons);
 
 router.put("/updateCoupon/:id", couponController.updateCouponDetails);
 
+router.delete("/deleteCoupon/:id", couponController.deleteCoupon);
+
 router.post("/addCouponToUser", couponController.addUserCoupon);
 
 router.get("/getAllUserCoupons", couponController.getAllUserCoupons);
