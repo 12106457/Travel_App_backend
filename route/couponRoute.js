@@ -8,6 +8,8 @@ router.post("/addNewCoupon", couponController.addCoupon);
 
 router.get("/getAllCoupons", couponController.getAllCoupons);
 
+router.put("/updateCoupon/:id", couponController.updateCouponDetails);
+
 router.post("/addCouponToUser", couponController.addUserCoupon);
 
 router.get("/getAllUserCoupons", couponController.getAllUserCoupons);
