@@ -43,15 +43,20 @@ exports.updateCouponDetails = async (req, res) => {
     );
 
     if (!updatedCoupon) {
-      return res.status(404).json({ message: "Coupon not found" });
+      return res.status(404).json({
+        status: false,
+        message: "Coupon not found",
+      });
     }
 
     res.status(200).json({
+      status: true,
       message: "Coupon updated successfully",
       data: updatedCoupon,
     });
   } catch (error) {
     res.status(500).json({
+      status: false,
       message: "An error occurred while updating the coupon",
       error: error.message,
     });
