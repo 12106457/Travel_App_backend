@@ -1,0 +1,35 @@
+{
+    "bookingType": [
+      {
+        "id": 1,
+        "name": "Hotel",
+        "short_name": "HTL",
+        "symbol": "🏨"
+      },
+      {
+        "id": 2,
+        "name": "Train",
+        "short_name": "TRN",
+        "symbol": "🚆"
+      },
+      {
+        "id": 3,
+        "name": "Flight",
+        "short_name": "FLT",
+        "symbol": "✈️"
+      },
+      {
+        "id": 4,
+        "name": "Bus",
+        "short_name": "BUS",
+        "symbol": "🚌"
+      },
+      {
+        "id": 5,
+        "name": "Cab",
+        "short_name": "CAB",
+        "symbol": "🚖"
+      }
+    ]
+  }
+  

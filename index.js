@@ -6,6 +6,7 @@ const app = express();
 dotenv.config();
 const userRoute = require("./route/authRoute");
 const couponRoute = require("./route/couponRoute");
+const masterDataRoute = require("./route/masterDataRoute");
 // Middleware (optional)
 app.use(express.json());
 app.use(
@@ -27,6 +28,7 @@ mongoose
 
 app.use("/auth", userRoute);
 app.use("/coupon", couponRoute);
+app.use("/masterdata", masterDataRoute);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Travelling App Backend Server...");

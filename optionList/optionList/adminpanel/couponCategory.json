@@ -1,0 +1,53 @@
+{
+    "categories": [
+      {
+        "id": 1,
+        "name": "Bank Offers",
+        "short_name": "Bank",
+        "symbol": "💳"
+      },
+      {
+        "id": 2,
+        "name": "Special Coupons",
+        "short_name": "Special",
+        "symbol": "🎁"
+      },
+      {
+        "id": 3,
+        "name": "New User Offers",
+        "short_name": "New User",
+        "symbol": "👥"
+      },
+      {
+        "id": 4,
+        "name": "Flash Deals",
+        "short_name": "Flash",
+        "symbol": "⚡"
+      },
+      {
+        "id": 5,
+        "name": "Referral Coupons",
+        "short_name": "Referral",
+        "symbol": "🔗"
+      },
+      {
+        "id": 6,
+        "name": "Seasonal Offers",
+        "short_name": "Seasonal",
+        "symbol": "🌸"
+      },
+      {
+        "id": 7,
+        "name": "Bundle Deals",
+        "short_name": "Bundle",
+        "symbol": "📦"
+      },
+      {
+        "id": 8,
+        "name": "Student Offers",
+        "short_name": "Student",
+        "symbol": "🎓"
+      }
+    ]
+  }
+  

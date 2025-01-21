@@ -335,3 +335,39 @@ exports.updateProfile = (req, res) => {
       });
     });
 };
+
+// Get all users along with the coupon count
+exports.getAllUserList = async (req, res) => {
+  try {
+    const users = await User.find();
+
+    const data = await Promise.all(
+      users.map(async (user) => {
+        const userCoupons = await userCoupon
+          .find({ userId: user._id })
+          .populate("couponId");
+
+        const couponCount = userCoupons.length;
+
+        return {
+          ...user.toObject(), // Spread the user data as an object
+          coupons: userCoupons,
+          couponCount: couponCount,
+        };
+      })
+    );
+
+    // Return the data with the coupon count
+    res.status(200).send({
+      status: true,
+      message: "Fetch successful",
+      data: data,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      status: false,
+      message: "Error fetching user list",
+    });
+  }
+};

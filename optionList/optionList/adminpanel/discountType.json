@@ -1,0 +1,16 @@
+{
+    "discountType": [
+      {
+        "id": 1,
+        "name": "FLAT",
+        "short_name": "",
+        "symbol": "💳"
+      },
+      {
+        "id": 2,
+        "name": "PERCENTAGE",
+        "short_name": "",
+        "symbol": "💯"
+      }
+    ]
+  }
