@@ -7,7 +7,7 @@ const couponSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      required: false,
+      required: true,
     },
     code: {
       type: String,
