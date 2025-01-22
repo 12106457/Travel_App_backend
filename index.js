@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 });
 
 // Start server
-const PORT = 3001;
+const PORT = 3002;
 app.listen(PORT, (err) => {
   if (err) {
     console.log("Something went wrong while starting the server...");

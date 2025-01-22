@@ -17,5 +17,7 @@ router.get("/user", userController.getUserProfile);
 
 router.put("/updateProfile", userController.updateProfile);
 
+router.get("/getAllUsers", userController.getAllUserList);
+
 
 module.exports = router;
