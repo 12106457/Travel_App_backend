@@ -340,17 +340,17 @@ exports.updateProfile = (req, res) => {
 exports.getAllUserList = async (req, res) => {
   try {
     const users = await User.find();
+    const userCouponsData=await userCoupon.find().populate("couponId");
+
 
     const data = await Promise.all(
       users.map(async (user) => {
-        const userCoupons = await userCoupon
-          .find({ userId: user._id })
-          .populate("couponId");
+        const userCoupons = userCouponsData.filter((item) => item.userId.toString() === user._id.toString());
 
         const couponCount = userCoupons.length;
 
         return {
-          ...user.toObject(), // Spread the user data as an object
+          ...user.toObject(),
           coupons: userCoupons,
           couponCount: couponCount,
         };
@@ -371,3 +371,5 @@ exports.getAllUserList = async (req, res) => {
     });
   }
 };
+
+

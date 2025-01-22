@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-
+const enumType =require("../typeMention/enumType");
 const couponCategoryModel=require("../model/enumModel/couponCategoryModel")
 const discountTypeModel=require("../model/enumModel/discountTypeModel")
 const typeOfBookingModel=require("../model/enumModel/typeOfBookingModel")
@@ -64,9 +64,9 @@ async function handler() {
 
 exports.adminPanelMasterData = async (req, res) => {
     try {
-        const couponcategorydata=await couponCategoryModel.find();
-        const discounttypedata=await discountTypeModel.find();
-        const typeOfBookingdata=await typeOfBookingModel.find();
+        const couponcategorydata=await couponCategoryModel.find({ active: true });
+        const discounttypedata=await discountTypeModel.find({ active: true });
+        const typeOfBookingdata=await typeOfBookingModel.find({ active: true });
         res.status(200).send({
             status: true,
             message: "Fetch master data successfully",
@@ -84,3 +84,31 @@ exports.adminPanelMasterData = async (req, res) => {
         });
     }
 };
+
+exports.getparticularEnum= async (req,res)=>{
+  const {type}=req.params;
+  const {id}=req.body;
+  
+  const Model = enumType[type];
+  console.log(Model);
+  if (!Model) {
+    return res.status(400).send({ status: false, message: "Invalid model type" });
+  }
+  try {
+    // Fetch the data using the dynamically selected model
+    const data = await Model.findOneAndUpdate(
+      { id: id },  // Use custom field 'id'
+      req.body,     // The data to update
+      { new: true } // Return the updated document
+    );
+    
+    if (!data) {
+      return res.status(404).send({ status: false, message: "Data not found for update" });
+    }
+    
+    res.send({ status: true, data: { type: data } });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ status: false, message: "Error fetching data" });
+  }
+}
