@@ -149,7 +149,7 @@ exports.getAllUserCoupons = (req, res) => {
   });
 };
 
-exports.getCouponsEachUser = (req, res) => {
+exports.getCouponsEachUser = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -159,21 +159,30 @@ exports.getCouponsEachUser = (req, res) => {
     });
   }
 
-  UserCoupons.find({ userId: id })
-    .populate("userId")
-    .populate("couponId")
-    .then((data) => {
-      res.status(200).send({
-        status: true,
-        message: "Fetch successful",
-        data: data,
-      });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        status: false,
-        message: "Fetch failed",
-        error: err.message,
-      });
+  try {
+    // Use Promise.all to fetch both queries in parallel
+    const [userCoupons, generalCoupons] = await Promise.all([
+      UserCoupons.find({ userId: id })
+        // .populate("userId")
+        .populate("couponId"),
+      couponModel.find({
+        category: { $in: ["Bank Offers", "Referral Coupons", "Seasonal Offers", "Student Offers","Special Coupons"] },
+      }),
+    ]);
+
+    return res.status(200).send({
+      status: true,
+      message: "Fetch successful",
+      data: {
+        userCoupons,
+        generalCoupons,
+      },
     });
+  } catch (err) {
+    return res.status(500).send({
+      status: false,
+      message: "Fetch failed",
+      error: err.message,
+    });
+  }
 };

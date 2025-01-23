@@ -53,7 +53,7 @@ exports.createUser = async (req, res) => {
     }
 
     // Fetch coupons data
-    const couponsData = await couponModel.findOne({ code: "NEWUSER" });
+    const couponsData = await couponModel.findOne({ _id: "6787671b62165bca950b3f1d" });
     if (!couponsData) {
       return res.status(404).send({
         status: false,
@@ -298,19 +298,11 @@ exports.getUserProfile = async (req, res) => {
 };
 
 exports.updateProfile = (req, res) => {
-  const { email, updateData } = req.body;
-
-  // Ensure email is provided
-  if (!email || !updateData) {
-    return res.status(400).send({
-      status: false,
-      message: "Email and update data are required.",
-    });
-  }
+  const {id}=req.params;
 
   User.findOneAndUpdate(
-    { email: email.toLowerCase() },
-    { $set: updateData },
+    { _id: id },
+    { $set: req.body },
     { new: true }
   )
     .then((updatedUser) => {
@@ -371,5 +363,6 @@ exports.getAllUserList = async (req, res) => {
     });
   }
 };
+
 
 

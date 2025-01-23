@@ -15,7 +15,7 @@ router.post("/otp", userController.validateOTP);
 
 router.get("/user", userController.getUserProfile);
 
-router.put("/updateProfile", userController.updateProfile);
+router.put("/updateProfile/:id", userController.updateProfile);
 
 router.get("/getAllUsers", userController.getAllUserList);
 
