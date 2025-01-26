@@ -158,6 +158,7 @@ exports.getCouponsEachUser = async (req, res) => {
       message: "Invalid user ID format",
     });
   }
+  console.log("id:",id);
 
   try {
     // Use Promise.all to fetch both queries in parallel
@@ -170,13 +171,16 @@ exports.getCouponsEachUser = async (req, res) => {
       }),
     ]);
 
+
+    const data = [
+      ...userCoupons,
+      ...generalCoupons
+    ];
+
     return res.status(200).send({
       status: true,
       message: "Fetch successful",
-      data: {
-        userCoupons,
-        generalCoupons,
-      },
+      data: data,
     });
   } catch (err) {
     return res.status(500).send({
