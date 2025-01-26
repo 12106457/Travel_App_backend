@@ -171,9 +171,20 @@ exports.getCouponsEachUser = async (req, res) => {
       }),
     ]);
 
+    const transformedUserCoupons = userCoupons.map((userCoupon) => ({
+      _id: userCoupon._id,
+      userId: userCoupon.userId, 
+      ...userCoupon.couponId._doc, 
+      minOrderValue: userCoupon.minOrderValue, 
+      maxDiscount: userCoupon.maxDiscount,
+      isActive: userCoupon.isActive,
+      startDate: userCoupon.startDate,
+      endDate: userCoupon.endDate,
+    }));
+
 
     const data = [
-      ...userCoupons,
+      ...transformedUserCoupons,
       ...generalCoupons
     ];
 
