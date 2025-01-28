@@ -129,9 +129,32 @@ exports.getparticularEnum= async (req,res)=>{
       return res.status(404).send({ status: false, message: "Data not found for update" });
     }
     
-    res.send({ status: true, data: { type: data } });
+    res.send({ status: true,message:"fetch successfully", data: { type: data } });
   } catch (error) {
     console.error(error);
     res.status(500).send({ status: false, message: "Error fetching data" });
   }
 }
+
+exports.addNewMasterData = async (req, res) => {
+  const { type } = req.params;
+  const Model = enumType[type];
+  
+  console.log(Model);
+
+  if (!Model) {
+    return res.status(400).send({ status: false, message: "Invalid model type" });
+  }
+  
+  try {
+    
+    const recordCount = await Model.countDocuments();
+    const data = await Model.create({ id: recordCount + 1, ...req.body });
+
+    res.send({ status: true, message: "Added new master data record successfully", data: { type: data } });
+  } catch (error) {
+    console.error(error);
+    
+    res.status(500).send({ status: false, message: "Error creating data" });
+  }
+};
