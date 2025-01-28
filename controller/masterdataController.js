@@ -62,7 +62,7 @@ async function handler() {
   handler();
   
 
-exports.adminPanelMasterData = async (req, res) => {
+exports.adminPanelMasterData = async (req, res) => { // it will send which are active
     try {
         const couponcategorydata=await couponCategoryModel.find({ active: true });
         const discounttypedata=await discountTypeModel.find({ active: true });
@@ -84,6 +84,29 @@ exports.adminPanelMasterData = async (req, res) => {
         });
     }
 };
+
+exports.sendAllMasterDataToAdmin=async (req,res)=>{ // it will send all record either true or false
+  try {
+    const couponcategorydata=await couponCategoryModel.find();
+    const discounttypedata=await discountTypeModel.find();
+    const typeOfBookingdata=await typeOfBookingModel.find();
+    res.status(200).send({
+        status: true,
+        message: "Fetch master data successfully",
+        data: {
+            couponCategory: couponcategorydata,
+            discountType: discounttypedata,
+            typeOfBooking: typeOfBookingdata
+        }
+    });
+} catch (error) {
+    res.status(500).send({
+        status: false,
+        message: "Error fetching master data",
+        error: error.message
+    });
+}
+}
 
 exports.getparticularEnum= async (req,res)=>{
   const {type}=req.params;
