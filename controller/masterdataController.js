@@ -64,9 +64,9 @@ async function handler() {
 
 exports.adminPanelMasterData = async (req, res) => { // it will send which are active
     try {
-        const couponcategorydata=await couponCategoryModel.find({ active: true });
-        const discounttypedata=await discountTypeModel.find({ active: true });
-        const typeOfBookingdata=await typeOfBookingModel.find({ active: true });
+        const couponcategorydata=await couponCategoryModel.find({ active: true }).sort({ id: 1 });
+        const discounttypedata=await discountTypeModel.find({ active: true }).sort({ id: 1 });
+        const typeOfBookingdata=await typeOfBookingModel.find({ active: true }).sort({ id: 1 });
         res.status(200).send({
             status: true,
             message: "Fetch master data successfully",
@@ -87,9 +87,9 @@ exports.adminPanelMasterData = async (req, res) => { // it will send which are a
 
 exports.sendAllMasterDataToAdmin=async (req,res)=>{ // it will send all record either true or false
   try {
-    const couponcategorydata=await couponCategoryModel.find();
-    const discounttypedata=await discountTypeModel.find();
-    const typeOfBookingdata=await typeOfBookingModel.find();
+    const couponcategorydata=await couponCategoryModel.find().sort({ id: 1 });
+    const discounttypedata=await discountTypeModel.find().sort({ id: 1 });
+    const typeOfBookingdata=await typeOfBookingModel.find().sort({ id: 1 });
     res.status(200).send({
         status: true,
         message: "Fetch master data successfully",
