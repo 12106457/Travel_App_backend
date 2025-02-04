@@ -12,6 +12,10 @@ const busSchema = new mongoose.Schema({
        ref: 'BusDriver', 
        default:null,
     },
+    basePrice:{
+      type:Number,
+      required:true,
+    },
     route: { 
       type: String, 
       required: true 
