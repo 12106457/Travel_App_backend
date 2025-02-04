@@ -59,7 +59,7 @@ async function handler() {
     }
   }
   
-  handler();
+  // handler();
   
 
 exports.adminPanelMasterData = async (req, res) => { // it will send which are active
